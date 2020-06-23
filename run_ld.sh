@@ -1,6 +1,6 @@
 export GLUE_DIR=./data
 
-PYTHONPATH=../ CUDA_VISIBLE_DEVICES=0,1,2,3 python run_vat.py \
+PYTHONPATH=../ CUDA_VISIBLE_DEVICES=0,1,2,3 python run_ld.py \
   --task_name mld \
   --do_train \
   --do_eval \
@@ -14,4 +14,4 @@ PYTHONPATH=../ CUDA_VISIBLE_DEVICES=0,1,2,3 python run_vat.py \
   --num_k 40 \
   --num_self_train 1 \
   --num_train_epochs 10.0 \
-  --output_dir /tmp/mld_ja_vat_output/ \
+  --output_dir /tmp/mld_ja_ld_output/ \
