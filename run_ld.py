@@ -39,6 +39,8 @@ from pytorch_pretrained_bert.tokenization import BertTokenizer
 from pytorch_pretrained_bert.modeling import BertForSequenceClassification
 from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
+from at import FGM
+
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -429,6 +431,8 @@ def train(model, optimizer, train_examples, eval_examples, best_acc, args):
         train_sampler = DistributedSampler(train_data)
     train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=args.train_batch_size)
 
+    if args.adv_training:
+        fgm = FGM(model)
     model.train()
     for _ in trange(int(args.num_train_epochs), desc="Epoch"):
         tr_loss = 0
@@ -449,6 +453,15 @@ def train(model, optimizer, train_examples, eval_examples, best_acc, args):
             else:
                 loss.backward()
 
+            if args.adv_training:
+                fgm.attack()  
+                loss_adv, _ = model(input_ids, segment_ids, input_mask, label_ids)
+                if args.n_gpu > 1:
+                    loss_adv = loss_adv.mean()
+                loss_adv.backward()  
+                fgm.restore() 
+
+
             tr_loss += loss.item()
             nb_tr_examples += input_ids.size(0)
             nb_tr_steps += 1
@@ -461,8 +474,7 @@ def train(model, optimizer, train_examples, eval_examples, best_acc, args):
                 optimizer.step()
                 optimizer.zero_grad()
                 args.global_step += 1
-            sys.stdout.write(
-                '\rMSE loss[{}] EnMSE loss[{}]'.format(loss.item(), 0))
+
 
         # validation starts
         eval_s_features = eval_examples
@@ -646,6 +658,10 @@ def main():
                         default=False,
                         action='store_true',
                         help="Set this flag if you are using an uncased model.")
+    parser.add_argument("--adv_training",
+                        default=False,
+                        action='store_true',
+                        help="Set this flag if you are using adversarial training.")
     parser.add_argument("--train_batch_size",
                         default=32,
                         type=int,

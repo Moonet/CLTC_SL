@@ -1,6 +1,7 @@
-# A Robust Self-Learning Framework for Cross-Lingual Text Classification
+# Leveraging Adversarial Training in Self-Learning for Cross-Lingual Text Classification
 
-This is Pytorch implemenation of our paper: A Robust Self-Learning Framework for Cross-Lingual Text Classification, introduced by Xin Dong, Gerard de Melo.
+This is Pytorch implemenation of our papers: A Robust Self-Learning Framework for Cross-Lingual Text Classification,
+Leveraging Adversarial Training in Self-Learning for Cross-Lingual Text Classification, introduced by Xin Dong, Gerard de Melo.
 
 ## Requirements
 
@@ -23,6 +24,13 @@ Please run
 ./run_ld.sh
 ```
 
+To run adversarial training, Plese add
+
+```
+--adv_training 
+```
+in run_ld.sh
+
 ### Citation
 
 If you found this code/work to be useful in your own research, please considering citing the following:
@@ -36,4 +44,12 @@ If you found this code/work to be useful in your own research, please considerin
   year={2019}
 }
 ```
-
+```
+@inproceedings{dong2020leveraging,
+  title={Leveraging Adversarial Training in Self-Learning for Cross-Lingual Text Classification},
+  author={Dong, Xin and Zhu, Yaxin and Zhang, Yupeng and Fu, Zuohui and Xu, Dongkuan and Yang, Sen and de Melo, Gerard},
+  booktitle={Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages={1541--1544},
+  year={2020}
+}
+```

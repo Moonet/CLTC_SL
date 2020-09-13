@@ -5,7 +5,7 @@ PYTHONPATH=../ CUDA_VISIBLE_DEVICES=0,1,2,3 python run_ld.py \
   --do_train \
   --do_eval \
   --do_lower_case \
-  --lang japanese \
+  --adv_training \
   --data_dir $GLUE_DIR/MLDoc/ \
   --bert_model bert-base-multilingual-cased \
   --max_seq_length 128 \
